@@ -7,6 +7,7 @@ default: &default
   host: <%= ENV['DATABASE_HOST'] || "127.0.0.1" %>
   port: 3306
   username: root
+  database: cubing
 
 development:
   <<: *default
@@ -20,5 +21,12 @@ test:
   database: wca_test
 
 production:
-  <<: *default
-  database: wca_production
+  primary: 
+    <<: *default
+    password:  <%= ENV['DATABASE_PASSWORD'] %>
+  primary_replica:
+    <<: *default
+    host: <%= ENV['DATABASE_REPLICA_HOST'] || "127.0.0.1" %>
+    password:  <%= ENV['DATABASE_PASSWORD'] %>
+  
+

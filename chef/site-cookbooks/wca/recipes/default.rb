@@ -106,6 +106,7 @@ db = {
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db["replica_host"] = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['password'] = secrets['mysql_password']
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
@@ -352,7 +353,9 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
-              db_url: db_url,
+              db_host: db['host'],
+              db_replica_host: db['replica_host'],
+              db_password: db['password']
             })
 end
 
